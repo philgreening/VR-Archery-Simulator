@@ -10,19 +10,19 @@ public class Pull : XRBaseInteractable
     public Transform start = null;
     public Transform end = null;
 
-    private XRBaseInteractor pullingInteractor = null;
+    private XRBaseInteractor pullInteractor = null;
 
-    // Start is called before the first frame update
-    protected override void OnSelectEntered(XRBaseInteractor interactor)
+    protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
-        base.OnSelectEntered(interactor);
-        pullingInteractor = interactor;
+        base.OnSelectEntered(args);
+        pullInteractor = (XRBaseInteractor)args.interactorObject;
+
     }
 
-    protected override void OnSelectExited(XRBaseInteractor interactor)
+    protected override void OnSelectExited(SelectExitEventArgs args)
     {
-        base.OnSelectExited(interactor);
-        pullingInteractor = null;
+        base.OnSelectExited(args);
+        pullInteractor = null;
         PullAmount = 0.0f;
     }
 
@@ -33,7 +33,7 @@ public class Pull : XRBaseInteractable
         {
             if (isSelected)
             {
-                Vector3 pullPosition = pullingInteractor.transform.position;
+                Vector3 pullPosition = pullInteractor.transform.position;
                 PullAmount = CalculatePull(pullPosition);
             }
         }
