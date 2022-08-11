@@ -7,25 +7,31 @@ public class Pull : XRBaseInteractable
 {
     public float PullAmount { get; private set; } = 0.0f;
 
-    public Transform start = null;
-    public Transform end = null;
+    [SerializeField] private Transform start = null;
+    [SerializeField] private Transform end = null;
 
-    private XRBaseInteractor pullInteractor = null;
+    public Vector3 PullPosition => Vector3.Lerp(start.position, end.position, PullAmount);
 
-    protected override void OnSelectEntered(SelectEnterEventArgs args)
+    //private XRBaseInteractor pullInteractor = null;
+
+ /*   protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
         base.OnSelectEntered(args);
         pullInteractor = (XRBaseInteractor)args.interactorObject;
-
     }
-
+*/
     protected override void OnSelectExited(SelectExitEventArgs args)
     {
         base.OnSelectExited(args);
-        pullInteractor = null;
+        //pullInteractor = null;
         PullAmount = 0.0f;
     }
 
+    private void UpdatePull()
+    {
+        Vector3 interactorPos = firstInteractorSelecting.transform.position;
+        PullAmount = CalculatePull(interactorPos);
+    }
     public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
     {
         base.ProcessInteractable(updatePhase);
@@ -33,8 +39,9 @@ public class Pull : XRBaseInteractable
         {
             if (isSelected)
             {
-                Vector3 pullPosition = pullInteractor.transform.position;
-                PullAmount = CalculatePull(pullPosition);
+                // pullPosition = pullInteractor.transform.position;
+                // PullAmount = CalculatePull(pullPosition);
+                UpdatePull();
             }
         }
     }
